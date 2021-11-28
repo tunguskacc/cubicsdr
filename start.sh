@@ -8,4 +8,4 @@ exec docker run \
     --sysctl net.ipv4.conf.all.src_valid_mark=1 \
     --privileged \
     --volume "/etc/wireguard:/etc/wireguard/:ro" \
-    tunguska.cc/wireguard-socks-proxy
+    tunguska-cc/wireguard-socks-proxy:latest
