@@ -7,7 +7,7 @@ now using Debian and adapting to the network interfaces.
 
 ## How to run
 
-You can run it with
+You can run it with the following command:
 
 ```bash
 docker run \
