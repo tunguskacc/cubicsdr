@@ -1,5 +1,6 @@
 FROM debian:bullseye-slim
 LABEL maintainer="ivan@tunguska.cc"
+LABEL org.opencontainers.image.source="https://github.com/tunguska--cc/wireguard-socks-proxy"
 ARG DEBIAN_FRONTEND="noninteractive"
 
 RUN apt update  \
