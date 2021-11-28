@@ -18,7 +18,7 @@ docker run \
     --sysctl net.ipv4.conf.all.src_valid_mark=1 \
     --privileged \
     --volume "/etc/wireguard:/etc/wireguard/:ro" \
-    tunguskacc/wireguard-socks-proxy
+    ghcr.io/tunguskacc/wireguard-socks-proxy
 ```
 
 Or use directly the `start.sh` script:
