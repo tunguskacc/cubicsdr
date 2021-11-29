@@ -1,6 +1,6 @@
-FROM debian:bullseye-slim as BUILD
+FROM debian:bullseye-slim
 LABEL maintainer="ivan@tunguska.cc"
-LABEL org.opencontainers.image.source="https://github.com/tunguska-cc/wireguard-socks-proxy"
+LABEL org.opencontainers.image.source="https://github.com/tunguskacc/wireguard-socks-proxy"
 ARG DEBIAN_FRONTEND="noninteractive"
 
 RUN apt update && apt upgrade -y \
@@ -8,7 +8,6 @@ RUN apt update && apt upgrade -y \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-FROM scratch
 COPY ./danted.conf /etc/
 COPY ./entrypoint.sh /entrypoint.sh
 
