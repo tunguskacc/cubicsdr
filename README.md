@@ -2,16 +2,17 @@
  
 Expose WireGuard as a SOCKS5 proxy in a Docker container.
 
-This is a update from the [docker-wireguard-socks-proxy](https://hub.docker.com/r/kizzx2/wireguard-socks-proxy), 
-now using Debian and adapting to the network interfaces.
+This is a based on the [docker-wireguard-socks-proxy](https://hub.docker.com/r/kizzx2/wireguard-socks-proxy), 
+now using Debian and adapting several points.
+
+Please note that this assumes an existing Wireguard configuration working.
 
 ## How to run
 
 You can run it with the following command:
 
 ```bash
-docker run \
-    --rm --tty --interactive \
+docker run -d\
     --name=wireguard-socks-proxy \
     --cap-add=NET_ADMIN \
     --publish 127.0.0.1:1080:1080 \
@@ -21,9 +22,9 @@ docker run \
     ghcr.io/tunguskacc/wireguard-socks-proxy
 ```
 
-Or use directly the `start.sh` script:
+Or use directly the `wg-tunnel` script:
 ```bash
-bash start.sh /directory/containing/your/wireguard/conf/file
+bash wg-tunnel
 ```
 
 Then connect to SOCKS proxy through through `127.0.0.1:1080` (or `local.docker:1080` for Mac / docker-machine / etc.). For example:

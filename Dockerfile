@@ -8,7 +8,7 @@ RUN apt update && apt upgrade -y \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./danted.conf /etc/
-COPY ./entrypoint.sh /entrypoint.sh
+COPY ./conf/danted.conf /etc/
+COPY ./init /init
 
-ENTRYPOINT "/entrypoint.sh"
+ENTRYPOINT "/init"

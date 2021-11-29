@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+wg-quick up wg0
+exec /usr/sbin/danted
+
+finish () {
+    echo "Shutting down"
+    wg-quick down wg0
+    exit 0
+}
+trap finish SIGTERM
+
+sleep infinity &
+wait $!
