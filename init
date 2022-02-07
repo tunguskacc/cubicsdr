@@ -2,12 +2,13 @@
 
 set -e
 
-wg-quick up wg0
-exec /usr/sbin/danted
+service lighttpd start
+
+dump1090-fa --net-only
 
 finish () {
     echo "Shutting down"
-    wg-quick down wg0
+    killall dump1090-fa
     exit 0
 }
 trap finish SIGTERM
