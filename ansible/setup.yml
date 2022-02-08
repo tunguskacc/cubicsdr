@@ -1,0 +1,18 @@
+
+wget
+
+
+git clone git://git.osmocom.org/rtl-sdr.git
+cd rtl-sdr
+mkdir build
+cd build
+cmake ../ -DDETACH_KERNEL_DRIVER=ON -DINSTALL_UDEV_RULES=ON
+make
+sudo make install
+sudo ldconfig
+cd ~
+sudo cp ./rtl-sdr/rtl-sdr.rules /etc/udev/rules.d/
+sudo reboot
+
+
+sudo bash -c "$(wget -O - https://repo-feed.flightradar24.com/install_fr24_rpi.sh)"
