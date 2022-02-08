@@ -1,0 +1,28 @@
+---
+version: '3.3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  swag:
+    image: tunguskacc/dump1090-fa
+    container_name: airdump
+#    environment:
+#      - PUID={{ uid_service_user }}
+#      - PGID={{ gid_service_user }}
+#      - TZ={{ tz }}
+#      - URL={{ domain }}
+#      - SUBDOMAINS=wildcard
+#      - VALIDATION=dns
+#      - DNSPLUGIN=cloudflare
+#      - CAPABILITIES=NET_ADMIN
+#      - EMAIL=ivan@tunguska.cc
+#    volumes:
+#      - {{ data_services_path}}/swag/config:/config
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - "2080:80"

@@ -1,41 +1,12 @@
-# wireguard-socks-proxy
+# AirDUMP
  
-Expose WireGuard as a SOCKS5 proxy in a Docker container.
+Based on dump1090 for ADB-C RTS SDR.
 
-This is a based on the [docker-wireguard-socks-proxy](https://hub.docker.com/r/kizzx2/wireguard-socks-proxy), 
-now using Debian and adapting several points.
+## ARM64 build
 
-Please note that this assumes an existing Wireguard configuration working.
+Building ARM packages:
 
-## How to run
-
-You can run it with the following command:
-
-```bash
-docker run -d\
-    --name=wireguard-socks-proxy \
-    --cap-add=NET_ADMIN \
-    --publish 127.0.0.1:1080:1080 \
-    --sysctl net.ipv4.conf.all.src_valid_mark=1 \
-    --privileged \
-    --volume "/etc/wireguard:/etc/wireguard/:ro" \
-    ghcr.io/tunguskacc/wireguard-socks-proxy
 ```
-
-Or use directly the `wg-tunnel` script:
-```bash
-bash wg-tunnel
+sudo apt-get install qemu binfmt-support qemu-user-static # Install the qemu packages
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes # This step will execute the registering scripts
 ```
-
-Then connect to SOCKS proxy through through `127.0.0.1:1080` (or `local.docker:1080` for Mac / docker-machine / etc.). For example:
-
-```bash
-curl --proxy socks5h://127.0.0.1:1080 ipinfo.io
-```
-
-## FAQ
-
-### Why you need to run with privileged?
-
-Wireguard changed since the original image was published, and now it requires sysctl permissions. 
-See [here](https://hub.docker.com/r/jordanpotter/wireguard) for more context.
