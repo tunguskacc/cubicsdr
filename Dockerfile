@@ -5,11 +5,12 @@ ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBIAN_VERSION="bullseye"
 
 RUN apt update && apt upgrade -y \
-    && apt install -y --no-install-recommends git build-essential fakeroot debhelper librtlsdr-dev pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev dpkg-dev\
+    && apt install -y --no-install-recommends build-essential fakeroot debhelper librtlsdr-dev pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev dpkg-dev\
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./dump1090 /dump1090
+RUN curl -sSL https://github.com/flightaware/dump1090/archive/refs/tags/v7.1.tar.gz \
+		| tar -v -C /dump1090 -xz
 WORKDIR /dump1090
 RUN make clean && ./prepare-build.sh bullseye && dpkg-buildpackage -b --no-sign
 
