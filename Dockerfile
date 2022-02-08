@@ -1,4 +1,5 @@
-FROM debian:bullseye-slim AS builder
+ARG ARCH=amd64
+FROM --platform=linux/${ARCH} debian:bullseye-slim AS builder
 LABEL maintainer="ivan@tunguska.cc"
 LABEL org.opencontainers.image.source="https://github.com/tunguskacc/airdump"
 ARG DEBIAN_FRONTEND="noninteractive"
@@ -14,9 +15,8 @@ WORKDIR /usr/local/src/dump1090-7.1
 RUN make clean && ./prepare-build.sh ${DEBIAN_VERSION} && dpkg-buildpackage -b --no-sign
 
 
+ARG ARCH=amd64
 FROM builder AS deploy
-
-ARG ARCH
 
 COPY --from=builder /usr/local/src/dump1090-fa_7.1_${ARCH}.deb ./dump1090-fa_7.1_${ARCH}.deb
 COPY ./init /init
