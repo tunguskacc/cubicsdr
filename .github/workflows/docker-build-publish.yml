@@ -19,11 +19,11 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Login to DockerHub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to Github Packages
         uses: docker/login-action@v1
@@ -40,7 +40,7 @@ jobs:
 
           tags: |
             ghcr.io/tunguskacc/cubicsdr:latest
-            ghcr.io/tunguskacc/cubicsdr:multiarch-amd64
+            ghcr.io/tunguskacc/cubicsdr:v0.1
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Image digest
