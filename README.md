@@ -1,6 +1,6 @@
-# AirDUMP
+# CubicSDR
  
-Based on dump1090 for ADB-C RTS SDR.
+Builds CubicSDR from latest release in Debian and runs it inside Docker.
 
 ## ARM64 build
 
@@ -14,12 +14,12 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes # This st
 and build with
 
 ```
-docker build --platform arm64 -t tunguskacc/airdump-arm64 --build-arg ARCH=arm64 .
-docker build --platform amd64 -t tunguskacc/airdump-amd64 --build-arg ARCH=amd64 .
-docker push registry.tunguska.cc/airdump:multiarch-amd64
-docker push registry.tunguska.cc/airdump:multiarch-arm64
-docker manifest create registry.tunguska.cc/airdump:latest registry.tunguska.cc/airdump:multiarch-amd64 registry.tunguska.cc/airdump:multiarch-arm64
-docker manifest push registry.tunguska.cc/airdump:latest
+docker build --platform arm64 -t tunguskacc/cubicsdr-arm64 --build-arg ARCH=arm64 .
+docker build --platform amd64 -t tunguskacc/cubicsdr-amd64 --build-arg ARCH=amd64 .
+docker push registry.tunguska.cc/cubicsdr:multiarch-amd64
+docker push registry.tunguska.cc/cubicsdr:multiarch-arm64
+docker manifest create registry.tunguska.cc/cubicsdr:latest registry.tunguska.cc/cubicsdr:multiarch-amd64 registry.tunguska.cc/cubicsdr:multiarch-arm64
+docker manifest push registry.tunguska.cc/cubicsdr:latest
 ```
 
 

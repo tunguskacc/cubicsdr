@@ -39,8 +39,8 @@ jobs:
           context: .
 
           tags: |
-            ghcr.io/tunguskacc/airdump:latest
-            ghcr.io/tunguskacc/airdump:multiarch-amd64
+            ghcr.io/tunguskacc/cubicsdr:latest
+            ghcr.io/tunguskacc/cubicsdr:multiarch-amd64
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Image digest
