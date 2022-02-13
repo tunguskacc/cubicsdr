@@ -1,14 +1,12 @@
 #!/bin/bash
 
 set -e
-
-service lighttpd start
-
-dump1090-fa --net-only
+xstart
+/usr/local/src/CubicSDR-0.2.7/build/x64/CubicSDR
 
 finish () {
     echo "Shutting down"
-    killall dump1090-fa
+    killall cubicsdr
     exit 0
 }
 trap finish SIGTERM

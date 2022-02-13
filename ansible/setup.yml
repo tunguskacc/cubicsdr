@@ -1,18 +1,31 @@
+---
 
-wget
+- name: Setup RTL SDR
+  hosts: devserver
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    rtl_server_packages:
+      - wget
+      - cmake
+      - build-essential
+      - rtl-sdr
+      - avahi-daemon
+      - libavahi-client-dev
+      - soapysdr0.8-module-rtlsdr
+      - soapyremote-server
+      - dump1090-mutability
+
+  tasks:
+  - name: Install apt packages
+    package:
+      state: latest
+      install_recommends: no
+      update_cache: yes
+      autoclean: yes
+       autoremove: yes
+      name: "{{ rtl_server_packages }}"
 
 
-git clone git://git.osmocom.org/rtl-sdr.git
-cd rtl-sdr
-mkdir build
-cd build
-cmake ../ -DDETACH_KERNEL_DRIVER=ON -DINSTALL_UDEV_RULES=ON
-make
-sudo make install
-sudo ldconfig
-cd ~
-sudo cp ./rtl-sdr/rtl-sdr.rules /etc/udev/rules.d/
-sudo reboot
 
-
-sudo bash -c "$(wget -O - https://repo-feed.flightradar24.com/install_fr24_rpi.sh)"

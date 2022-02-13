@@ -39,8 +39,8 @@ jobs:
           context: .
 
           tags: |
-            docker.io/tunguskacc/wireguard-socks-proxy:latest
-            ghcr.io/tunguskacc/wireguard-socks-proxy
+            ghcr.io/tunguskacc/airdump:latest
+            ghcr.io/tunguskacc/airdump:multiarch-amd64
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Image digest

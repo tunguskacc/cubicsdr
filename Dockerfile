@@ -1,31 +1,40 @@
 ARG ARCH=amd64
-FROM --platform=linux/${ARCH} debian:bullseye-slim AS builder
+FROM --platform=linux/${ARCH} debian:bullseye-slim AS build-wx
 LABEL maintainer="ivan@tunguska.cc"
-LABEL org.opencontainers.image.source="https://github.com/tunguskacc/airdump"
+LABEL org.opencontainers.image.source="https://github.com/tunguskacc/cubicsdr"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBIAN_VERSION="bullseye"
+ENV DISPLAY :0
 
 RUN apt update && apt upgrade -y \
-    && apt install -y --no-install-recommends ca-certificates curl build-essential fakeroot debhelper librtlsdr-dev pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev dpkg-dev\
+    && apt install -y --no-install-recommends ca-certificates curl build-essential automake cmake libpulse-dev freeglut3  \
+    freeglut3-dev wget libsoapysdr-dev libliquid-dev libgtk-3-dev xterm xserver-xorg-core x11-utils xinit xserver-xorg-input-evdev\
     && apt clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -sSL https://github.com/flightaware/dump1090/archive/refs/tags/v7.1.tar.gz | tar -v -C /usr/local/src/ -xz
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/src/dump1090-7.1
-RUN make clean && ./prepare-build.sh ${DEBIAN_VERSION} && dpkg-buildpackage -b --no-sign
+# wxWidgets
+RUN curl -sSL https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.5/wxWidgets-3.1.5.tar.bz2 | tar xvfj - -C /usr/local/src/
+WORKDIR /usr/local/src/wxWidgets-3.1.5/
+RUN mkdir static && ./autogen.sh && ./configure --prefix=`echo /usr/local/src/wxWidgets-3.1.5/static` --with-opengl \
+    --disable-glcanvasegl --disable-shared --enable-monolithic --with-libjpeg --with-libtiff --with-libpng --with-zlib \
+    --disable-sdltest --enable-unicode --enable-display --enable-propgrid --disable-webview --disable-webviewwebkit CXXFLAGS="-std=c++0x" \
+    && make -j4 && make install
 
+# liquid-DSP
+RUN curl -sSL https://github.com/jgaeddert/liquid-dsp/archive/refs/tags/v1.4.0.tar.gz | tar xvfz - -C /usr/local/src/
+WORKDIR /usr/local/src/liquid-dsp-1.4.0/
+RUN ./bootstrap.sh &&  CFLAGS="-march=native -O3" ./configure --enable-fftoverride && make -j4 && make install && ldconfig
 
-ARG ARCH=amd64
-FROM builder AS deploy
-
-COPY --from=builder /usr/local/src/dump1090-fa_7.1_${ARCH}.deb ./dump1090-fa_7.1_${ARCH}.deb
-COPY ./init /init
-
+FROM build-wx
+# cubicSDR
 RUN apt update && apt upgrade -y \
-    && apt install -y --no-install-recommends librtlsdr0 lighttpd libncurses6 libhackrf0 libbladerf2  liblimesuite20.10-1 \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && dpkg -i ./dump1090-fa_7.1_${ARCH}.deb
+    && apt install -y --no-install-recommends  xterm xserver-xorg-core x11-utils xinit xserver-xorg-input-evdev \
+    librtlsdr0 libhackrf0 libsoapysdr0.7 soapysdr0.7-module-all gr-soapy gr-osmosdr avahi-daemon\
+    && apt clean
+RUN curl -sSL https://github.com/cjcliffe/CubicSDR/archive/refs/tags/0.2.7.tar.gz | tar -v -C /usr/local/src/ -xz
+WORKDIR /usr/local/src/CubicSDR-0.2.7/
+RUN mkdir build && cd build && cmake ../ -DCMAKE_BUILD_TYPE=Release -DwxWidgets_CONFIG_EXECUTABLE=/usr/local/src/wxWidgets-3.1.5/static/bin/wx-config && make -j4
 
-
-ENTRYPOINT "/init"
+COPY ./init ./init
+CMD ["/usr/local/src/CubicSDR-0.2.7/build/x64/CubicSDR"]
+# ENTRYPOINT "./init"
