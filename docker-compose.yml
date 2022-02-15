@@ -3,7 +3,8 @@ version: '3.3'
 
 services:
   cubicsdr:
-    image: registry.tunguska.cc/cubicsdr
+    #image: registry.tunguska.cc/cubicsdr
+    image: ghcr.io/tunguskacc/cubicsdr
     container_name: cubicsdr
     environment:
       DISPLAY: ${DISPLAY}
