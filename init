@@ -1,15 +1,8 @@
 #!/bin/bash
 
 set -e
-xstart
+export PULSE_SERVER=unix:/run/user/1000/pulse/native
+# service dbus start
+service avahi-daemon start
+pulseaudio --start
 /usr/local/src/CubicSDR-0.2.7/build/x64/CubicSDR
-
-finish () {
-    echo "Shutting down"
-    killall cubicsdr
-    exit 0
-}
-trap finish SIGTERM
-
-sleep infinity &
-wait $!

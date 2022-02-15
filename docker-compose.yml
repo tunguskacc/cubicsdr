@@ -3,12 +3,18 @@ version: '3.3'
 
 services:
   cubicsdr:
-    #image: registry.tunguska.cc/cubicsdr
-    image: ghcr.io/tunguskacc/cubicsdr
+    user: "1000:1000"
+    image: registry.tunguska.cc/cubicsdr
+    #image: ghcr.io/tunguskacc/cubicsdr
     container_name: cubicsdr
     environment:
       DISPLAY: ${DISPLAY}
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - "$HOME/.Xauthority:/root/.Xauthority:rw"
+      - "/run/user/1000/pulse/native:/run/user/1000/pulse/native"
+      - "/var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
     network_mode: host
