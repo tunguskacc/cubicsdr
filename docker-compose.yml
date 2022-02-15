@@ -13,6 +13,7 @@ services:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - "$HOME/.Xauthority:/root/.Xauthority:rw"
       - "/run/user/1000/pulse/native:/run/user/1000/pulse/native"
+      - "/var/run/dbus:/var/run/dbus"
       - "/var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket"
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
