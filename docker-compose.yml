@@ -1,12 +1,22 @@
 ---
-version: '3.3'
+---
+version: '3.5'
+
+networks:
+  default:
+    driver: bridge
 
 services:
   cubicsdr:
     user: "1000:1000"
     image: registry.tunguska.cc/cubicsdr
-    #image: ghcr.io/tunguskacc/cubicsdr
     container_name: cubicsdr
+    build:
+      context: ./cubicsdr/
+      dockerfile: Dockerfile
+      args:
+        ARCH: amd64
+        DEBIANVERSION: bookworm
     environment:
       DISPLAY: ${DISPLAY}
     volumes:
